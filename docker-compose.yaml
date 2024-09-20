@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app1:
+    build:
+      context: ./app
+    container_name: app1
+    ports:
+      - "3000:3000"
+
+  app2:
+    build:
+      context: ./app
+    container_name: app2
+    ports:
+      - "3001:3000"
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx
+      - /etc/letsencrypt:/etc/letsencrypt  # Sertifikat Let's Encrypt disimpan di sini
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+    depends_on:
+      - app1
+      - app2
